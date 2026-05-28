@@ -4,6 +4,107 @@
  * the main pane) and the rendered-document styling driven by the four
  * typography knobs. */
 
+/* === Bundled fonts ================================================
+ *
+ * Without these, webkit2gtk falls back to DejaVu Serif / generic mono
+ * which look noticeably chunky compared to a real desktop app. The
+ * three bundled families plus the curated system-safe choices in
+ * main.ts are what shows up in the picker.
+ *
+ * Lifted from markdown-editor (same MIT, same monorepo). Licenses
+ * for each face live alongside the woff2 files. */
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/src/assets/fonts/Inter-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("/src/assets/fonts/Inter-SemiBold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("/src/assets/fonts/Inter-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Charter";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/src/assets/fonts/Charter-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Charter";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("/src/assets/fonts/Charter-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Charter";
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  src: url("/src/assets/fonts/Charter-Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Charter";
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  src: url("/src/assets/fonts/Charter-BoldItalic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Hasklig";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/src/assets/fonts/Hasklig-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hasklig";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("/src/assets/fonts/Hasklig-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hasklig";
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  src: url("/src/assets/fonts/Hasklig-Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Hasklig";
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  src: url("/src/assets/fonts/Hasklig-BoldItalic.woff2") format("woff2");
+}
+
+/* === Smoothing + legibility ======================================
+ *
+ * Default webkit2gtk text rendering is rough — without these the
+ * fonts look pixely. These three lines do most of the visual lift. */
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+}
+
 /* === Shell-app chrome (mirrors file-drop / photo-importer) ======== */
 
 #titlebar, #status-line { display: none; }
@@ -229,14 +330,14 @@
 }
 .empty-state.error svg { color: var(--fm-accent); }
 .empty-state .mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: "Hasklig", ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 12px;
 }
 
 /* === Rendered document =========================================== */
 
 .render {
-  --mv-heading-font: "Source Serif 4", Charter, Georgia, serif;
+  --mv-heading-font: "Charter", Georgia, "Times New Roman", serif;
   --mv-body-font:    "Inter", system-ui, sans-serif;
   --mv-heading-size: 28px;
   --mv-body-size:    16px;
@@ -248,6 +349,10 @@
   font-family: var(--mv-body-font);
   font-size: var(--mv-body-size);
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
 }
 
 .render h1, .render h2, .render h3,
@@ -290,7 +395,7 @@
 }
 
 .render code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: "Hasklig", ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.9em;
   background: rgba(48, 52, 63, 0.05);
   padding: 1px 5px;
