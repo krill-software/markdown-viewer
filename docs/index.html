@@ -26,3 +26,74 @@ features:
   - tag: Tauri · Rust
     title: Native Linux
     blurb: Small binary, real file associations, no Electron. Opens .md from the file manager like a native app.
+principles_heading: A reader, not an editor.
+principles:
+  - strong: No editing surface.
+    span: Authoring lives in markdown-editor or anything else. This window shows the rendered file.
+  - strong: Two knobs, not twenty.
+    span: Heading font, heading size, body font, body size. Anything else stays off the table.
+  - strong: Your document, your typography.
+    span: The viewer's frame is calm. The page inside renders however you set it.
+  - strong: Stillness.
+    span: No toolbars, no popovers, no reading-mode toggles. Just the document.
+extension: ".md"
+---
+<style>
+  .mv-doc {
+    padding: 28px 32px;
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .mv-doc h1 {
+    font-family: "Inter", sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .mv-doc .mv-sub {
+    color: var(--muted);
+    font-size: 13.5px;
+    font-family: "Inter", sans-serif;
+    margin: 0 0 18px;
+  }
+  .mv-doc h2 {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 22px 0 6px;
+  }
+  .mv-doc p { margin: 0 0 12px; }
+  .mv-doc code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: rgba(48, 52, 63, 0.06);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .mv-doc ul { margin: 0 0 12px; padding-left: 20px; }
+  .mv-doc li { margin-bottom: 2px; }
+</style>
+<div class="pv-titlebar">
+  <span class="title">notes.md</span>
+  <span class="winbtns">─ ▢ ✕</span>
+</div>
+<div class="mv-doc">
+  <h1>Sourdough timing</h1>
+  <p class="mv-sub">a working note · last edited just now</p>
+
+  <h2>The plan</h2>
+  <p>Mix at 8am, fold every 30 min until 11am, shape, cold retard overnight. Bake at 9am the next day. Adjusts in summer — start later, cut the bulk by an hour.</p>
+
+  <h2>What to remember</h2>
+  <ul>
+    <li>Levain at <code>1:5:5</code>, ready when it doubles</li>
+    <li>Dough temp target: 25°C — adjust water</li>
+    <li>Score with the blade flat, not vertical</li>
+  </ul>
+</div>
+<div class="pv-status">
+  <span>notes.md · 312 words</span>
+  <span>Source Serif 4 · 15.5px</span>
+</div>
