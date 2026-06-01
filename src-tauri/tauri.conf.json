@@ -13,10 +13,10 @@
     "windows": [
       {
         "title": "Markdown Viewer",
-        "width": 1100,
+        "width": 1296,
         "height": 800,
         "minWidth": 720,
-        "minHeight": 540,
+        "minHeight": 445,
         "decorations": false,
         "resizable": true,
         "center": true,
@@ -48,7 +48,10 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["deb", "appimage"],
+    "targets": [
+      "deb",
+      "appimage"
+    ],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -60,7 +63,10 @@
     "longDescription": "Open a .md file, see it rendered live, pick the typography you want. Watches the file so saves in any editor (vim, markdown-editor, VS Code) update the render in real time.",
     "fileAssociations": [
       {
-        "ext": ["md", "markdown"],
+        "ext": [
+          "md",
+          "markdown"
+        ],
         "name": "Markdown",
         "description": "Markdown document",
         "mimeType": "text/markdown",
