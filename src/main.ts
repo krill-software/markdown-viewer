@@ -2,7 +2,7 @@ import "@krill-software/desktop-ui/styles";
 import "katex/dist/katex.min.css";
 import "highlight.js/styles/github.css";
 import "./styles.css";
-import { mountChrome, showBootError, checkForUpdates } from "@krill-software/desktop-ui";
+import { mountChrome, showBootError } from "@krill-software/desktop-ui";
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWebview } from "@tauri-apps/api/webview";
@@ -53,7 +53,6 @@ let typography: Typography = { ...DEFAULTS };
 
 // ---- App state ------------------------------------------------------
 
-let viewportEl: HTMLElement;
 let mainContentEl: HTMLElement;
 let auxEl: HTMLElement;
 let renderRoot: HTMLElement;
@@ -91,77 +90,13 @@ function el<K extends keyof HTMLElementTagNameMap>(
   return node;
 }
 
-// ---- Shell chrome (mirrors file-drop / photo-importer) ------------
-
-function buildMainTopbar(): HTMLElement {
-  const bar = el("div", { class: "main-topbar", "data-tauri-drag-region": "true" });
-  const min = el("button", { class: "main-topbar-btn", type: "button", title: "Minimize" });
-  min.append(iconSvg("minus", 16));
-  min.addEventListener("click", () => { void getCurrentWindow().minimize(); });
-  const max = el("button", { class: "main-topbar-btn", type: "button", title: "Maximize" });
-  max.append(iconSvg("square", 14));
-  max.addEventListener("click", () => { void getCurrentWindow().toggleMaximize(); });
-  const close = el("button", {
-    class: "main-topbar-btn",
-    type: "button",
-    title: "Close",
-    "data-kind": "close",
-  });
-  close.append(iconSvg("x", 16));
-  close.addEventListener("click", () => { void getCurrentWindow().close(); });
-  bar.append(min, max, close);
-  return bar;
-}
-
-function buildAuxTopbar(): HTMLElement {
-  const bar = el("div", { class: "aux-topbar", "data-tauri-drag-region": "true" });
-  const hamburger = el("button", { class: "main-topbar-btn", type: "button", title: "Menu" });
-  hamburger.append(iconSvg("menu", 16));
-  hamburger.addEventListener("click", (e) => {
-    e.stopPropagation();
-    toggleHamburgerMenu(bar);
-  });
-  bar.append(hamburger);
-  return bar;
-}
-
-function toggleHamburgerMenu(anchor: HTMLElement) {
-  const existing = document.querySelector(".menu-popover");
-  if (existing) { existing.remove(); return; }
-  const pop = el("div", { class: "menu-popover" });
-  const items: Array<{ label: string; action: () => void } | { sep: true }> = [
-    { label: "Open .md…",      action: () => void openViaDialog() },
-    { sep: true },
-    { label: "Check for updates…", action: () => void checkForUpdates("Markdown Viewer") },
-    { sep: true },
-    { label: "Quit",          action: () => void getCurrentWindow().close() },
-  ];
-  for (const it of items) {
-    if ("sep" in it) {
-      pop.append(el("div", { class: "menu-popover-sep" }));
-    } else {
-      const btn = el("button", { class: "menu-popover-item", type: "button" }, it.label);
-      btn.addEventListener("click", () => { pop.remove(); it.action(); });
-      pop.append(btn);
-    }
-  }
-  anchor.parentElement?.append(pop);
-  setTimeout(() => {
-    const handler = (ev: MouseEvent) => {
-      if (!pop.contains(ev.target as Node)) {
-        pop.remove();
-        document.removeEventListener("click", handler);
-      }
-    };
-    document.addEventListener("click", handler);
-  }, 0);
-}
-
 // ---- Sidebar (typography controls) ---------------------------------
 
 function renderAux() {
-  auxEl.replaceChildren();
-  auxEl.append(buildAuxTopbar());
+  // The aux strip (hamburger) is owned by desktop-ui's app layout — leave it
+  // in place and re-render only our own content below it.
+  auxEl.querySelector(".type-controls")?.remove();
+  auxEl.querySelector(".aux-version")?.remove();
 
   const section = el("div", { class: "type-controls" });
   section.append(el("h2", { class: "type-section" }, "Typography"));
@@ -379,25 +314,22 @@ async function installDragDrop() {
 async function boot() {
   const chrome = mountChrome({
     productName: "Markdown Viewer",
+    version: __APP_VERSION__,
+    layout: "app",
+    showAuxPane: true,
     actions: {
       "open": openViaDialog,
     },
-    bindings: {
-      "Ctrl+O": openViaDialog,
-    },
-    showStatusLine: false,
-    showAuxPane: true,
     updater: true,
   });
-  viewportEl = chrome.viewport;
   auxEl = chrome.aux!;
   auxEl.classList.add("typography-aux");
 
-  const topbar = buildMainTopbar();
-  mainContentEl = el("div", { class: "main-content" });
+  // Shell chrome (main-topbar + aux hamburger) comes from desktop-ui's app
+  // layout; we just render into the scroll area it provides.
+  mainContentEl = chrome.mainContent!;
   renderRoot = el("article", { class: "render" });
   mainContentEl.append(renderRoot);
-  viewportEl.replaceChildren(topbar, mainContentEl);
 
   // Load persisted typography choices, if any. Falls back to defaults
   // when the file is missing or malformed.
