@@ -4,7 +4,7 @@
  * "app" }). This file carries only the app's own surfaces: the sidebar
  * typography controls and the rendered-document styling. */
 
-/* Fonts (Inter / Charter / Hasklig) are bundled by desktop-ui — see its
+/* Fonts (Inter / Charter) are bundled by desktop-ui — see its
  * fonts.css. No local @font-face needed; the family names below resolve to
  * those bundled faces. */
 
@@ -92,7 +92,7 @@ body {
   padding: 0 32px 0 12px;
   font: inherit;
   font-size: 13px;
-  /* Pin line-height so a tall-metric preview font (Hasklig, Charter…)
+  /* Pin line-height so a tall-metric preview font (Charter…)
    * can't grow the line box past the 32px control and clip the name. */
   line-height: 1.4;
   color: var(--fm-text);
@@ -219,7 +219,7 @@ body {
   color: var(--fm-accent);
 }
 .empty-state .mono {
-  font-family: "Hasklig", ui-monospace, monospace;
+  font-family: var(--fm-mono);
   font-size: 12px;
 }
 
@@ -313,7 +313,7 @@ body {
 }
 
 .render code {
-  font-family: "Hasklig", ui-monospace, monospace;
+  font-family: var(--fm-mono);
   font-size: 0.9em;
   background: rgba(48, 52, 63, 0.05);
   padding: 1px 5px;

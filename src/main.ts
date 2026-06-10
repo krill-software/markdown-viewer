@@ -22,13 +22,13 @@ import { renderMarkdown, renderMermaidBlocks } from "./preview";
 interface FontChoice { label: string; css: string }
 // All choices fall back through reasonable system substitutes so a
 // missing face never collapses to DejaVu. The first three are bundled
-// as woff2 (see @font-face entries in styles.css) and always render
+// as woff2 (bundled by desktop-ui) and always render
 // crisply; the rest rely on the user's system having them (or a
 // reasonable substitute).
 const FONTS: FontChoice[] = [
   { label: "Charter",         css: '"Charter", Georgia, "Times New Roman", serif' },
   { label: "Inter",           css: '"Inter", system-ui, -apple-system, sans-serif' },
-  { label: "Hasklig",         css: '"Hasklig", ui-monospace, SFMono-Regular, monospace' },
+  { label: "JetBrains Mono", css: '"JetBrains Mono", ui-monospace, monospace' },
   { label: "Georgia",         css: 'Georgia, "Times New Roman", serif' },
   { label: "Times New Roman", css: '"Times New Roman", Times, serif' },
   { label: "Helvetica",       css: 'Helvetica, "Liberation Sans", Arial, sans-serif' },
