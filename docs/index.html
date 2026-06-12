@@ -16,7 +16,7 @@ features:
     blurb: A curated list of eight serif / sans / mono families and a number for the size. That's it. No CSS panel, no theme picker, no line-height slider.
   - tag: Curated set
     title: Eight fonts, no more
-    blurb: Source Serif 4, Inter, JetBrains Mono, Charter, Georgia, Times, Helvetica, system-ui. Headings and body share the same list.
+    blurb: Charter, Inter, JetBrains Mono, Georgia, Times New Roman, Helvetica, Arial, system-ui. Headings and body share the same list.
   - tag: GFM
     title: CommonMark + tables
     blurb: Standard markdown with GitHub-flavoured tables, fenced code, task lists. No proprietary syntax, no plugin surface.
@@ -28,57 +28,174 @@ features:
     blurb: Small binary, real file associations, no Electron. Opens .md from the file manager like a native app.
 extension: ".md"
 mock:
-  filename: notes.md
-  state: 'Source Serif 4 · 15.5px'
+  chrome: app
 ---
 <style>
+  /* App-layout mock: hamburger + typography aux pane on the left, the
+   * rendered document in the main pane. No titlebar / status line —
+   * mock.chrome: app. The aux mirrors the real sidebar: Heading and
+   * Body font selects with px size boxes, plus "Reset to defaults".
+   * Defaults shown are the app's real ones: Charter 28px / Inter 16px. */
+  .mv-app {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    min-height: 400px;
+    font-family: var(--sans);
+  }
+  .mv-aux {
+    border-right: 1px solid var(--rule);
+    background: rgba(48, 52, 63, 0.03);
+    padding: 10px 14px;
+  }
+  .mv-burger { color: var(--muted); font-size: 14px; padding: 2px 2px 14px; }
+  .mv-section {
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+  .mv-group { margin-bottom: 16px; }
+  .mv-label {
+    font-size: 10.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .mv-row { display: flex; gap: 6px; }
+  .mv-select {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    height: 28px;
+    padding: 0 9px;
+    font-size: 12px;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .mv-select svg { width: 9px; height: 9px; color: var(--muted); flex: none; }
+  .mv-select.serif { font-family: Charter, Georgia, serif; }
+  .mv-sizebox {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    width: 48px;
+    height: 28px;
+    padding: 5px 8px 0;
+    box-sizing: border-box;
+    font-size: 12px;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    justify-content: flex-end;
+    font-variant-numeric: tabular-nums;
+  }
+  .mv-sizebox .mv-unit { font-size: 10px; color: var(--muted); }
+  .mv-reset {
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .mv-main { padding: 10px 24px 22px; }
+  .mv-winbtns {
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  /* The rendered document — content, not chrome. Mirrors the app's real
+   * defaults (heading: Charter, body: Inter), scaled down to mock size. */
   .mv-doc {
-    padding: 28px 32px;
-    font-family: "Source Serif 4", Georgia, serif;
-    font-size: 15.5px;
-    line-height: 1.65;
+    max-width: 58ch;
+    margin: 0 auto;
+    padding: 6px 8px 12px;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 13.5px;
+    line-height: 1.6;
     color: var(--ink);
   }
   .mv-doc h1 {
-    font-family: "Inter", sans-serif;
-    font-size: 22px;
+    font-family: Charter, Georgia, serif;
+    font-size: 23px;
     font-weight: 600;
-    margin: 0 0 4px;
-  }
-  .mv-doc .mv-sub {
-    color: var(--muted);
-    font-size: 13.5px;
-    font-family: "Inter", sans-serif;
-    margin: 0 0 18px;
+    line-height: 1.2;
+    margin: 0 0 10px;
   }
   .mv-doc h2 {
-    font-family: "Inter", sans-serif;
-    font-size: 16px;
+    font-family: Charter, Georgia, serif;
+    font-size: 18px;
     font-weight: 600;
-    margin: 22px 0 6px;
+    line-height: 1.2;
+    margin: 18px 0 6px;
   }
-  .mv-doc p { margin: 0 0 12px; }
+  .mv-doc p { margin: 0 0 10px; }
   .mv-doc code {
     font-family: var(--mono);
-    font-size: 13px;
-    background: rgba(48, 52, 63, 0.06);
+    font-size: 12px;
+    background: rgba(48, 52, 63, 0.05);
     padding: 1px 5px;
     border-radius: 3px;
   }
-  .mv-doc ul { margin: 0 0 12px; padding-left: 20px; }
-  .mv-doc li { margin-bottom: 2px; }
+  .mv-doc ul { margin: 0 0 10px; padding-left: 20px; }
+  .mv-doc li { margin: 2px 0; }
+
+  @media (max-width: 720px) {
+    .mv-app { grid-template-columns: 1fr; }
+    .mv-aux { display: none; }
+  }
 </style>
-<div class="mv-doc">
-  <h1>Sourdough timing</h1>
-  <p class="mv-sub">a working note · last edited just now</p>
+<div class="mv-app">
+  <aside class="mv-aux">
+    <div class="mv-burger">☰</div>
+    <h2 class="mv-section">Typography</h2>
+    <div class="mv-group">
+      <div class="mv-label">Heading</div>
+      <div class="mv-row">
+        <span class="mv-select serif">Charter
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+        <span class="mv-sizebox">28<span class="mv-unit">px</span></span>
+      </div>
+    </div>
+    <div class="mv-group">
+      <div class="mv-label">Body</div>
+      <div class="mv-row">
+        <span class="mv-select">Inter
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+        <span class="mv-sizebox">16<span class="mv-unit">px</span></span>
+      </div>
+    </div>
+    <span class="mv-reset">Reset to defaults</span>
+  </aside>
+  <div class="mv-main">
+    <div class="mv-winbtns">─ ▢ ✕</div>
+    <article class="mv-doc">
+      <h1>Sourdough timing</h1>
 
-  <h2>The plan</h2>
-  <p>Mix at 8am, fold every 30 min until 11am, shape, cold retard overnight. Bake at 9am the next day. Adjusts in summer — start later, cut the bulk by an hour.</p>
+      <h2>The plan</h2>
+      <p>Mix at 8am, fold every 30 min until 11am, shape, cold retard overnight. Bake at 9am the next day. Adjusts in summer — start later, cut the bulk by an hour.</p>
 
-  <h2>What to remember</h2>
-  <ul>
-    <li>Levain at <code>1:5:5</code>, ready when it doubles</li>
-    <li>Dough temp target: 25°C — adjust water</li>
-    <li>Score with the blade flat, not vertical</li>
-  </ul>
+      <h2>What to remember</h2>
+      <ul>
+        <li>Levain at <code>1:5:5</code>, ready when it doubles</li>
+        <li>Dough temp target: 25°C — adjust water</li>
+        <li>Score with the blade flat, not vertical</li>
+      </ul>
+    </article>
+  </div>
 </div>
